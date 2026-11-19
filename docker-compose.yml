@@ -1,0 +1,66 @@
+name: vk-monitor
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: vk_monitor_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-vk_monitor}
+      POSTGRES_USER: ${POSTGRES_USER:-vk_monitor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vk_monitor_pass}
+      TZ: ${TIMEZONE:-Europe/Moscow}
+      PGTZ: ${TIMEZONE:-Europe/Moscow}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vk_monitor} -d ${POSTGRES_DB:-vk_monitor}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: vk_monitor_redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Сервис приложения: используется на сервере (docker compose --profile prod up -d)
+  app:
+    profiles: ["prod"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vk_monitor_app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-vk_monitor}:${POSTGRES_PASSWORD:-vk_monitor_pass}@postgres:5432/${POSTGRES_DB:-vk_monitor}
+      REDIS_URL: redis://redis:6379/0
+      APP_ENV: production
+    volumes:
+      - ./config:/app/config:ro
+      - ./logs:/app/logs
+
+volumes:
+  pgdata:
+  redisdata:

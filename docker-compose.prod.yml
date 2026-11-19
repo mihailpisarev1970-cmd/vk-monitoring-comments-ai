@@ -1,0 +1,70 @@
+﻿name: vk-comments
+
+# Продовая конфигурация для сервера (Ubuntu 24.04).
+# Запуск:  docker compose -f docker-compose.prod.yml up -d --build
+#
+# Контейнеры:
+#   vk_comments        — приложение (поиск → фильтры → LLM → Telegram)
+#   Postgres_vk_comm   — база данных
+#   vk_comments_redis  — блокировки циклов (Redis требуется приложению)
+services:
+  Postgres_vk_comm:
+    image: postgres:17-alpine
+    container_name: Postgres_vk_comm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-vk_monitor}
+      POSTGRES_USER: ${POSTGRES_USER:-vk_monitor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+      TZ: ${TIMEZONE:-Europe/Moscow}
+      PGTZ: ${TIMEZONE:-Europe/Moscow}
+    # Порт наружу НЕ публикуется: база доступна только внутри сети compose
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vk_monitor} -d ${POSTGRES_DB:-vk_monitor}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  vk_comments_redis:
+    image: redis:7-alpine
+    container_name: vk_comments_redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  vk_comments:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vk_comments:latest
+    container_name: vk_comments
+    restart: unless-stopped
+    depends_on:
+      Postgres_vk_comm:
+        condition: service_healthy
+      vk_comments_redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-vk_monitor}:${POSTGRES_PASSWORD}@Postgres_vk_comm:5432/${POSTGRES_DB:-vk_monitor}
+      REDIS_URL: redis://vk_comments_redis:6379/0
+      APP_ENV: production
+      TZ: ${TIMEZONE:-Europe/Moscow}
+    volumes:
+      # Конфигурация монтируется, чтобы менять маркеры/фильтры без пересборки
+      - ./config:/app/config:ro
+      - ./logs:/app/logs
+
+volumes:
+  pgdata:
+  redisdata:

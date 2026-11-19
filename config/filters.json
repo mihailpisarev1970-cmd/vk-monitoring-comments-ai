@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "updated_at": "2026-11-17",
+
+  "filters": {
+    "ad": {
+      "enabled": true,
+      "comment": "Официальная реклама VK (ТЗ п.8). Отключение запрещено ТЗ — только для отладки."
+    },
+    "duplicate": {
+      "enabled": true,
+      "comment": "Точные дубли и похожие тексты (ТЗ п.11.4)"
+    },
+    "course": {
+      "enabled": true,
+      "comment": "Курсы и образовательные продукты (ТЗ п.10)"
+    },
+    "commercial": {
+      "enabled": true,
+      "comment": "Скрытая реклама и коммерческие предложения (ТЗ п.9)"
+    },
+    "spam": {
+      "enabled": true,
+      "comment": "Спам, накрутка активности, мошеннические схемы (ТЗ п.11)"
+    },
+    "quality": {
+      "enabled": true,
+      "comment": "Низкое качество, кликбейт, отсутствие тематической связи (ТЗ п.11)"
+    },
+    "comments": {
+      "enabled": true,
+      "comment": "Закрытые комментарии — проверка в браузере перед постановкой в очередь"
+    }
+  },
+
+  "monitoring": {
+    "window_minutes": 120,
+    "overlap_minutes": 0,
+    "max_age_hours": 4,
+    "count_per_query": 100,
+    "comment": "Rolling window поиска VK (docs/vk_api_check.md). max_age_hours — требование заказчика: в базу попадают только свежие публикации (опубликованы не более 4 часов назад) как на этапе поиска, так и при повторной проверке перед передачей в LLM. overlap_minutes=0 перекрытие не нужно: глубину окна задаёт max_age_hours."
+  },
+
+  "duplicate": {
+    "similarity_threshold": 0.94,
+    "shingle_size": 3,
+    "min_length_for_similarity": 120,
+    "comment": "Порог откалиброван на реальной выборке: близкие копии рекламных и новостных текстов дают 0.95-1.0, независимые тексты — p90=0.62, p99≈0.72. ТЗ п.11.4"
+  },
+
+  "course": {
+    "reject_on_strong_signal": true,
+    "min_signals_for_reject": 2,
+    "comment": "Одиночное слово «курс» не является основанием для отказа (ТЗ п.10)"
+  },
+
+  "commercial": {
+    "reject_on_strong_signal": true,
+    "min_signals_for_reject": 2,
+    "comment": "Услуги + призыв «пишите в личку» => отказ; отдельный сигнал => suspect для LLM (ТЗ п.9)"
+  },
+
+  "spam": {
+    "reject_on_strong_signal": true,
+    "min_signals_for_reject": 2,
+    "engagement_bait_reject": true,
+    "job_offer_min_signals": 3,
+    "comment": "Признаки накрутки активности отсекаются сразу (ТЗ п.11.2). job_offer_min_signals выше общего: слова «резюме»/«вакансия» встречаются в обычных рассуждениях о карьере"
+  },
+
+  "quality": {
+    "min_text_length": 40,
+    "max_hashtag_ratio": 0.6,
+    "max_link_ratio": 0.7,
+    "min_words": 8,
+    "clickbait_reject": false,
+    "require_topic_link": true,
+    "topic_terms_min_matches": 1,
+    "reject_non_text": true,
+    "min_sentences": 2,
+    "comment": "Бессодержательные тексты и случайные совпадения маркеров (ТЗ п.11.1). reject_non_text/min_sentences — требования заказчика: нет текстовой информации или <= 1 предложения => отказ"
+  },
+
+  "comments": {
+    "enabled": true,
+    "timeout_seconds": 20,
+    "max_checks_per_cycle": 25,
+    "recheck_after_hours": 0,
+    "comment": "Закрытые комментарии (требование заказчика): доступность проверяется через VK API wall.getComments — поле can_post равно false, если автор ограничил комментирование. Выполняется только для одобренных публикаций перед постановкой в очередь. При недоступности проверки публикация сохраняется: потеря полезного уведомления хуже лишнего сообщения."
+  },
+
+  "llm": {
+    "confidence_threshold": 0.85,
+    "max_retries": 2,
+    "max_posts_per_cycle": 25,
+    "comment": "Порог уверенности LLM (ТЗ п.12.5). max_posts_per_cycle — предел обработки LLM **за сутки** (требование заказчика: не более 25 публикаций в день). Счётчик общий для всех циклов суток: цикл берёт из PostgreSQL только публикации не старше max_age_hours и ровно столько, сколько осталось от дневного лимита."
+  },
+
+  "comment": {
+    "min_length": 200,
+    "max_length": 300,
+    "max_regeneration_attempts": 2,
+    "comment": "Требования к комментарию (ТЗ п.13.1, п.13.2)"
+  },
+
+  "db": {
+    "enabled": true,
+    "retention_hours": 24,
+    "batch_size": 500,
+    "comment": "Очистка БД от отработанных публикаций (требование заказчика: база не должна раздуваться). Удаляются публикации в терминальных статусах (sent, rejected_*, failed), обработанные более retention_hours часов назад. Связанные post_analysis, post_markers и notifications удаляются каскадно. Публикации в статусах new/approved/queued не удаляются никогда. Запас 24 часа нужен, чтобы тексты оставались в контексте дедупликации и отложенные уведомления успели дойти."
+  }
+}

@@ -1,0 +1,432 @@
+[
+  {
+    "name": "pass: технический вопрос",
+    "text": "Подскажите, какую библиотеку Python лучше использовать для создания Telegram-бота? Смотрю в сторону aiogram и pyTelegramBotAPI. Интересует поддержка асинхронной отправки медиагрупп и удобство тестирования хендлеров.",
+    "expected_pass": true,
+    "json_ok": true,
+    "passed_rules": true,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": false,
+      "is_course_offer": false,
+      "is_commercial_promotion": false,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": true,
+      "confidence": 0.95,
+      "matched_topics": [
+        "программирование",
+        "Python",
+        "чат-боты",
+        "автоматизация бизнеса"
+      ],
+      "spam_categories": [],
+      "reason": "Релевантный вопрос о библиотеках Python для разработки Telegram-ботов с конкретными требованиями"
+    },
+    "elapsed_s": 9.41,
+    "usage": {
+      "completion_tokens": 276,
+      "prompt_tokens": 4864,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1070,
+        "cached_tokens": 3790
+      },
+      "total_tokens": 5140
+    }
+  },
+  {
+    "name": "pass: опыт своего проекта",
+    "text": "Собрал небольшого бота на Python для учёта расходов: aiogram + SQLite. Из неочевидного — пришлось добавить идемпотентность обработки callback-запросов, иначе при двойном клике создавались дубликаты записей. Вынес проверку в middleware.",
+    "expected_pass": true,
+    "json_ok": true,
+    "passed_rules": true,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": false,
+      "is_course_offer": false,
+      "is_commercial_promotion": false,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": true,
+      "confidence": 0.95,
+      "matched_topics": [
+        "программирование",
+        "Python",
+        "чат-боты",
+        "автоматизация бизнеса"
+      ],
+      "spam_categories": [],
+      "reason": "Релевантная техническая публикация о разработке телеграм-бота с практическими советами по обработке idempotency"
+    },
+    "elapsed_s": 2.14,
+    "usage": {
+      "completion_tokens": 297,
+      "prompt_tokens": 4865,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1070,
+        "cached_tokens": 3791
+      },
+      "total_tokens": 5162
+    }
+  },
+  {
+    "name": "pass: дискуссия о технике",
+    "text": "Почему многие до сих пор используют requests вместо httpx в асинхронных проектах? По-моему, в FastAPI-сервисах httpx даёт больше контроля над таймаутами.",
+    "expected_pass": true,
+    "json_ok": true,
+    "passed_rules": true,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": false,
+      "is_course_offer": false,
+      "is_commercial_promotion": false,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": true,
+      "confidence": 0.95,
+      "matched_topics": [
+        "IT",
+        "программирование",
+        "Python"
+      ],
+      "spam_categories": [],
+      "reason": "Технический вопрос о выборе библиотек для асинхронных HTTP-запросов в Python"
+    },
+    "elapsed_s": 5.7,
+    "usage": {
+      "completion_tokens": 212,
+      "prompt_tokens": 616,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 828
+    }
+  },
+  {
+    "name": "reject: продажа услуг разработки",
+    "text": "Разрабатываем чат-ботов для бизнеса под ключ. Пишите в личные сообщения.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": true,
+      "is_course_offer": false,
+      "is_commercial_promotion": true,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": false,
+      "confidence": 0.95,
+      "matched_topics": [
+        "чат-боты",
+        "автоматизация бизнеса"
+      ],
+      "spam_categories": [],
+      "reason": "Коммерческое предложение услуг по разработке чат-ботов"
+    },
+    "elapsed_s": 4.37,
+    "usage": {
+      "completion_tokens": 669,
+      "prompt_tokens": 4196,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1148,
+        "cached_tokens": 0
+      },
+      "total_tokens": 4865
+    }
+  },
+  {
+    "name": "reject: автоматизация как услуга",
+    "text": "Автоматизируем отдел продаж с помощью ИИ. Поможем увеличить прибыль. Оставляйте заявку.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": true,
+      "is_course_offer": false,
+      "is_commercial_promotion": true,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": false,
+      "confidence": 0.95,
+      "matched_topics": [
+        "автоматизация бизнеса",
+        "развитие бизнеса"
+      ],
+      "spam_categories": [],
+      "reason": "Коммерческое предложение услуг по автоматизации отдела продаж с использованием ИИ"
+    },
+    "elapsed_s": 4.5,
+    "usage": {
+      "completion_tokens": 765,
+      "prompt_tokens": 4195,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1147,
+        "cached_tokens": 0
+      },
+      "total_tokens": 4960
+    }
+  },
+  {
+    "name": "reject: набор на курс",
+    "text": "Набираю группу на курс Python с нуля. Запись открыта, старт 1 декабря.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": true,
+      "is_course_offer": true,
+      "is_commercial_promotion": false,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": true,
+      "confidence": 0.95,
+      "matched_topics": [
+        "Python",
+        "программирование",
+        "IT"
+      ],
+      "spam_categories": [],
+      "reason": "Релевантное предложение курса по Python, соответствует тематике проекта"
+    },
+    "elapsed_s": 1.74,
+    "usage": {
+      "completion_tokens": 222,
+      "prompt_tokens": 4770,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1049,
+        "cached_tokens": 3717
+      },
+      "total_tokens": 4992
+    }
+  },
+  {
+    "name": "reject: наставничество",
+    "text": "Запускаю наставничество для начинающих программистов. 8 недель, разбор кода, портфолио. Мест осталось мало.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": true,
+      "is_course_offer": true,
+      "is_commercial_promotion": true,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": true,
+      "is_suspicious": false,
+      "has_information_value": false,
+      "confidence": 0.95,
+      "matched_topics": [
+        "программирование",
+        "IT",
+        "развитие бизнеса"
+      ],
+      "spam_categories": [
+        "course_offer",
+        "commercial_promotion",
+        "urgency_tactic"
+      ],
+      "reason": "Коммерческое предложение программы менторства с тактикой дефицита мест"
+    },
+    "elapsed_s": 17.16,
+    "usage": {
+      "completion_tokens": 267,
+      "prompt_tokens": 606,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 873
+    }
+  },
+  {
+    "name": "reject: вебинар-воронка",
+    "text": "Приходите на бесплатный вебинар, где я расскажу о своей программе обучения за 50 000 рублей.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": true,
+      "is_advertising": true,
+      "is_course_offer": true,
+      "is_commercial_promotion": true,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": false,
+      "confidence": 0.95,
+      "matched_topics": [
+        "обучение"
+      ],
+      "spam_categories": [],
+      "reason": "Реклама платной программы обучения через бесплатный вебинар"
+    },
+    "elapsed_s": 9.77,
+    "usage": {
+      "completion_tokens": 184,
+      "prompt_tokens": 612,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 796
+    }
+  },
+  {
+    "name": "reject: призыв к активности",
+    "text": "Напиши «+» в комментариях, если хочешь разбор. Ставь лайк и делай репост!",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": false,
+      "is_advertising": false,
+      "is_course_offer": false,
+      "is_commercial_promotion": false,
+      "is_spam": true,
+      "is_low_quality": true,
+      "is_clickbait": false,
+      "is_engagement_bait": true,
+      "is_suspicious": false,
+      "has_information_value": false,
+      "confidence": 0.95,
+      "matched_topics": [],
+      "spam_categories": [
+        "engagement_bait",
+        "low_quality_content"
+      ],
+      "reason": "Публикация содержит только призыв к взаимодействию без ценного контента"
+    },
+    "elapsed_s": 1.79,
+    "usage": {
+      "completion_tokens": 218,
+      "prompt_tokens": 4785,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 0,
+        "cached_tokens": 4781
+      },
+      "total_tokens": 5003
+    }
+  },
+  {
+    "name": "reject: крипто-схема",
+    "text": "Наш бот приносит 15% в неделю на автоинвестировании. Первым 100 участникам бонус. Пиши в личку, реферальная ссылка внутри.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": false,
+      "is_advertising": true,
+      "is_course_offer": false,
+      "is_commercial_promotion": true,
+      "is_spam": true,
+      "is_low_quality": true,
+      "is_clickbait": true,
+      "is_engagement_bait": true,
+      "is_suspicious": true,
+      "has_information_value": false,
+      "confidence": 0.98,
+      "matched_topics": [],
+      "spam_categories": [
+        "финансовая схема",
+        "реферальная программа",
+        "нереалистичные обещания",
+        "скам"
+      ],
+      "reason": "Финансовая пирамида с нереалистичными обещаниями доходности, реферальной системой и срочностью"
+    },
+    "elapsed_s": 2.1,
+    "usage": {
+      "completion_tokens": 307,
+      "prompt_tokens": 4840,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1064,
+        "cached_tokens": 3772
+      },
+      "total_tokens": 5147
+    }
+  },
+  {
+    "name": "reject: нерелевантно",
+    "text": "НОВИНКИ WOLFORD: зимний принт, деликатное мерцание металлизированных нитей. Каталог по ссылке в профиле.",
+    "expected_pass": false,
+    "json_ok": true,
+    "passed_rules": false,
+    "correct": true,
+    "missing_fields": [],
+    "parsed": {
+      "relevant": false,
+      "is_advertising": true,
+      "is_course_offer": false,
+      "is_commercial_promotion": true,
+      "is_spam": false,
+      "is_low_quality": false,
+      "is_clickbait": false,
+      "is_engagement_bait": false,
+      "is_suspicious": false,
+      "has_information_value": false,
+      "confidence": 0.95,
+      "matched_topics": [],
+      "spam_categories": [
+        "commercial_promotion",
+        "product_advertising"
+      ],
+      "reason": "Коммерческое предложение товаров бренда Wolford, не относится к тематике проекта"
+    },
+    "elapsed_s": 2.1,
+    "usage": {
+      "completion_tokens": 219,
+      "prompt_tokens": 4789,
+      "prompt_tokens_details": {
+        "cache_creation_input_tokens": 1053,
+        "cached_tokens": 3732
+      },
+      "total_tokens": 5008
+    }
+  }
+]
