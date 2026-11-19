@@ -12,7 +12,14 @@ htmlcov/
 
 # Env / secrets
 .env
-.env.local
+.env.*
+!.env.example
+*.env
+prod.env
+*.pem
+*.key
+secrets/
+credentials.json
 
 # Logs / runtime
 logs/
